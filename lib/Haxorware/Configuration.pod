@@ -1,0 +1,901 @@
+=head1 NAME
+
+Haxorware::Modem - Query and configure Haxorware firmwware.
+
+=head1 VERSION
+
+Version 0.01
+
+=head1 SYNOPSIS
+
+	use Haxorware::Modem;
+
+	# Use default settings
+	$modem = Haxorware::Modem->new();
+
+	# Automatically connect and retrieve modem settings
+	$modem = Haxorware::Modem->new(
+		host => '192.168.100.1',
+		username => 'user',
+		password => 'pass',
+		autoconnect => 1
+	);
+
+	# Retrieve Speed Limits
+	$ds = $modem->download_speed;
+	$us = $modem->upload_speed;
+
+	# Set MAC Addresses
+	$modem->hfc('11:11:11:11:11:11');
+	$modem->ethernet('22:22:22:22:22:22');
+	$modem->usb('33:33:33:33:33:33');
+
+	# Save Changes
+	$modem->save();
+	$modem->save(reboot => true);
+
+=head1 DESCRIPTION
+
+Test Description
+
+=head1 METHODS
+
+B<save>
+
+=over
+
+$modem->save( reboot => true );
+
+=back
+
+Updates configuration on device.
+
+=over
+
+=item *
+
+C<reboot>: Perform reboot after saving settings.
+
+=back
+
+B<bpi_backup>
+
+=over
+
+$modem->tftp_download( localpath => '/my/path/to/local/file.tar.gz );
+
+=back
+
+This method allows you to download the BPI certicate set and store it locally.
+
+=over
+
+=item *
+
+C<localpath>: Local path to save retrieved configuration file.
+
+=back
+
+B<bpi_plus_ca>
+
+=over
+
+$modem->bpi_plus_ca( localpath => '/my/path/to/local/file.cert' );
+
+=back
+
+This method allows you to restore the BPI+ CA certificate.
+
+=over
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<bpi_plus_cm>
+
+=over
+
+$modem->bpi_plus_cm( localpath => '/my/path/to/local/file.cert' );
+
+=back
+
+This method allows you to restore the BPI+ CM certificate.
+
+=over
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<bpi_plus_root>
+
+$modem->bpi_plus_root( localpath => '/my/path/to/local/file.cert' );
+
+This method allows you to restore the BPI+ Root certificate.
+
+=over 2
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<bpi_private>
+
+$modem->bpi_plus_root( localpath => '/my/path/to/local/file.cert' );
+
+This method allows you to restore the BPI Private certificate.
+
+=over 2
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<bpi_public>
+
+$modem->bpi_plus_root( localpath => '/my/path/to/local/file.cert' );
+
+This method allows you to restore the BPI Public certificate.
+
+=over 2
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<bpi_restore>
+
+=over
+
+$modem->bpi_plus_root( localpath => '/my/path/to/local/file.tar.gz' );
+
+=back
+
+This method allows you to restore a certificate set.
+
+=over 2
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<vol_retore>
+
+=over
+
+$modem->vol_restore( localpath => '/my/path/to/local/file.cm' );
+
+=back
+
+This method allows you to restore the volitile configuration.
+
+=over 2
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<tftp_download>
+
+=over
+
+$modem->tftp_download( server => '10.0.0.1', remotepath => '/my/path/to/remote/file.cm', localpath => '/my/path/to/local/file.cm' );
+
+=back
+
+This method allows you to download config files from your ISP's TFTP server to examine them with programs such as vultureware or autoserve them from the modem.
+
+=over 2
+
+=item *
+
+C<server>: IP Address of ISP's TFTP Server
+
+=item *
+
+C<remotepath>: Remote path to TFTP configuration file.
+
+=item *
+
+C<localpath>: Local path to save retrieved configuration file.
+
+=back
+
+B<file_upload>
+
+=over
+
+$modem->file_upload( localpath => '/my/path/to/local/file.cm' );
+
+=back
+
+This method allows you to restore the volitile configuration.
+
+=over 2
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<file_info_defrag>
+
+=over
+
+$modem->file_info_defrag();
+
+=back
+
+This method allows you to restore the volitile configuration.
+
+B<file_info_erase>
+
+=over
+
+$modem->file_info_erase();
+
+=back
+
+This method allows you to restore the volitile configuration.
+
+B<vol_backup>
+
+=over
+
+$modem->vol_backup( localpath => '/my/path/to/local/file.cfg' );
+
+=back
+
+This method allows you to restore the volitile configuration.
+
+=over 2
+
+=item *
+
+C<localpath>: Local path to configuration file which is to be restored.
+
+=back
+
+B<vol_delete>
+
+=over
+
+$modem->vol_delete();
+
+=back
+
+This method allows you to restore the volitile configuration.
+
+B<telent_start>
+
+=over
+
+$modem->telnet_start();
+
+=back
+
+Starts the telnet server is currently stopped.
+
+B<telent_stop>
+
+=over
+
+$modem->telnet_stop();
+
+=back
+
+Stops the telnet server is currently started.
+
+=head1 ATTRIBUTES
+
+B<certificate_type>
+
+=over
+
+$modem->certificate_type(0)
+
+=back
+	my $certificate_type = $modem->certificate_type;
+
+Preferred type of certificate generation [0 = Motorola EuroDOCSIS, 1 = Motorola DOCSIS, 3 = Scientific Atlanta]. Default: 0 [INTEGER - READ_WRITE]
+
+B<ethernet>
+
+=over
+
+$modem->ethernet('00:11:22:33:44:55');\n
+my $ethernet =  $modem->ethernet;
+
+=back
+
+MAC address your computer or router sees when querying the modem via Ethernet. Default: '00:00:00:00:00:00' [STRING - READ_WRITE]
+
+B<hfc>
+
+=over
+
+$modem->hfc('00:11:22:33:44:55');
+my $hfc =  $modem->hfc;
+
+=back
+
+MAC address your ISP sees when querying the modem via HFC. Changing this to an address that does not have factory certificates loaded will generate a self signed certificate. Default: '00:00:00:00:00:00' [STRING - READ_WRITE]
+
+B<serial_number>
+
+=over
+
+$modem->serial_number('0123456789ABCDEFGHIJK');
+my $serial_number = $modem->serial_number;
+
+=back
+
+Serial present upon query of modem. Default: '000000000000' [STRING - READ_WRITE]
+
+B<usb>
+
+=over
+
+$modem->usb('00:11:22:33:44:55');
+my $usb =  $modem->usb;
+
+=back
+
+MAC address your computer or router sees when querying the modem via USB. Default: '00:00:00:00:00:00' [STRING - READ_WRITE]
+
+B<bpi_type>
+
+=over
+
+$modem->bpi_type(1);
+my $type =  $modem->bpi_type;
+
+=back
+
+Version of baseline privacy running [0 = Disabled, 1 = BPI (DOCSIS 1.0), 2 = BPI+ (DOCSIS 1.1), 3 = BPI+ Bypass]. Default: 1 [INTEGER - READ_WRITE]
+
+B<config_autoserve>
+
+=over
+
+$modem->config_autoserve('file.cfg');
+my $autoserve = $modem->config_autoserve;
+
+=back
+
+Autmatically server uploaded configuration file. Use B<config_store()> to upload new configuration and use B<config_list()> to list uploaded configurations. Default: '' [STRING - READ_WRITE]
+
+B<config_filename>
+
+=over
+
+$modem->config_filename('file.cfg');
+my $filename = $modem->config_filename;
+
+=back
+
+Filename of the config file you want to pull from the Config TFTP Server. Default: '' [STRING - READ_WRITE]
+
+B<config_server>
+
+=over
+
+$modem->config_server('192.168.1.1');
+my $server = $modem->config_server;
+
+=back
+
+IP address of the TFTP server hosting the config file you want to run. '0.0.0.0' [STRING - READ_WRITE]
+
+B<annex>
+
+=over
+
+$modem->annex(3);
+my $annex = $modem->annex;
+
+=back
+
+DOCSIS Annex type based on region [0 = DOCSIS, 1 = EURODOCSIS, 3 = BOTH]. Default: 0 [INTEGER - READ_WRITE]
+
+B<frequency_1>
+
+=over
+
+$modem->frequency_1(4027500000);
+my $freq1 = $modem->frequency_1;
+
+=back
+
+Preferred downstream frequency 1 in Hz's that is checked before scanning. Default: 0 [INTEGER - READ_WRITE]
+
+B<frequency_2>
+
+=over
+
+$modem->frequency_2(4027500000);
+my $freq2 = $modem->frequency_2;
+
+=back
+
+Preferred downstream frequency 2 in Hz's that is checked before scanning. Default: 0 [INTEGER - READ_WRITE]
+
+B<frequency_3>
+
+=over
+
+$modem->frequency_3(4027500000);
+my $freq3 = $modem->frequency_3;
+
+=back
+
+Preferred downstream frequency 3 in Hz's that is checked before scanning. Default: 0 [INTEGER - READ_WRITE]
+
+B<plan>
+
+=over
+
+$modem->plan(2);
+my $plan = $modem->plan;
+
+=back
+
+Regional frequency plan [0 = AMERICAN, 1 = EUROPEAN, 3 = JAPANESE]. Default: 0 [INTEGER - READ_WRITE]
+
+B<upstream_channel>
+
+=over
+
+$modem->upstream_channel(0);
+my $upstream_channel = $modem->upstream_channel;
+
+=back
+
+Preferred upstream channel [0 = Automatic Selection]. Default: 0 [INTEGER - READ_WRITE]
+
+B<dhcp_server>
+
+=over
+
+$modem->dhcp_server(1);
+my $dhcp_server = $modem->dhcp_server;
+
+=back
+
+Enable modem to assign WAN IP to router or to PC. Disable ONLY if you have it set manually. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<disable_firmware_upgrade>
+
+=over
+
+$modem->disable_firmware_upgrade(1);
+my $disable_firmware = $modem->disable_firmware_upgrade;
+
+=back
+
+This option will force Haxorware to ignore new modem firmware pushes from the ISP. Unchecking this could compromise your Haxorware install. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<disable_ip_filters>
+
+=over
+
+$modem->disable_ip_filters(1);
+my $disable_filters = $modem->disable_ip_filters;
+
+=back
+
+Disable ISP from blocking traffic of certain types on certain ports (such as if your ISP blocks port 80 to prevent you from hosting a web server).. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<factory_mode>
+
+=over
+
+$modem->factory_mode(0);
+my $factory_mode = $modem->factory_mode;
+
+=back
+
+Forces modem to behave as if it was supplied by the ISP and bypasses customs settings. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<force_network_access>
+
+=over
+
+$modem->force_network_access(0);
+my $force_network_access = $modem->force_network_access;
+
+=back
+
+Attempt to ignore unauthorised message. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<ignore_t1>
+
+=over
+
+$modem->ignore_t1(0);
+my $ignore_t1 = $modem->ignore_t1;
+
+=back
+
+Ignore timouts caused by no valid UCDS. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<ignore_t2>
+
+=over
+
+$modem->ignore_t2(1);
+my $ignore_t2 = $modem->ignore_t2;
+
+=back
+
+Ignore timouts caused by Ranging Opportunity. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<ignore_t3>
+
+=over
+
+$modem->ignore_t3(1);
+my $ignore_t3 = $modem->ignore_t3;
+
+=back
+
+Ignore timouts caused by Ranging Response. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<ignore_t4>
+
+=over
+
+$modem->ignore_t4(0);
+my $ignore_t4 = $modem->ignore_t4;
+
+=back
+
+Ignore timouts caused by Station Maintenance. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<host>
+
+=over
+
+$modem->host('192.168.1.1');
+my $host = $modem->host;
+
+=back
+
+Control panel IP address. Default: '192.168.100.1' [STRING - READ_WRITE]
+
+B<telnet_password>
+
+=over
+
+$modem->telnet_password('password');
+my $telnet_password = $modem->telnet_password;
+
+=back
+
+Password required to logon to telnet server. Default: 'root' [STRING - READ_WRITE]
+
+B<telnet_startup>
+
+=over
+
+$modem->telnet_startup(0);
+my $telnet_startup = $modem->telnet_startup;
+
+=back
+
+Whether Telnet should start when the modem is booted, or only when manually enabled. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<telnet_username>
+
+=over
+
+$modem->telnet_username('username');
+my $telnet_username = $modem->telnet_username;
+
+=back
+
+Username required to logon to telnet server. Default: 'root' [STRING - READ_WRITE]
+
+B<webgui_password>
+
+=over
+
+$modem->webgui_password('password');
+my $webgui_password = $modem->webgui_password;
+
+=back
+
+Password required to logon to control panel. Default: '' [STRING - READ_WRITE]
+
+B<webgui_protection>
+
+=over
+
+$modem->webgui_protection(0);
+my $webgui_protection = $modem->webgui_protection;
+
+=back
+
+Enables password protection of control panel. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<webgui_username>
+
+=over
+
+$modem->webgui_username('username');
+my $webgui_username = $modem->webgui_username;
+
+=back
+
+Username required to logon to control panel. Default: '' [STRING - READ_WRITE]
+
+B<download_speed>
+
+=over
+
+my $ds = $modem->download_speed();
+
+=back
+
+Retrives the maximum permited download speed (bytes) via the DOCSIS Configuration file. Default: 0 [INTEGER - READ_ONLY]
+
+B<upload_speed>
+
+=over
+
+my $ds = $modem->upload_speed();
+
+=back
+
+Retrives the maximum permited download speed (bytes) via the DOCSIS Configuration file. Default: 0 [INTEGER - READ_ONLY]
+
+B<force_static>
+
+=over
+
+$modem->force_static(1);
+my $force_static = $modem->force_static;
+
+=back
+
+Force your modem to override any DHCP assigned information. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<suppress_dhcp>
+
+=over
+
+$modem->suppress_dhcp(1);
+my $suppress_dhcp = $modem->suppress_dhcp;
+
+=back
+
+Ignore any DHCP lease offered by your ISP provider. Default: 0 [BOOLEAN - READ_WRITE]
+
+B<static_host>
+
+=over
+
+$modem->static_host('192.168.1.1');
+my $static_host = $modem->static_host;
+
+=back
+
+Desired static host IP address. Default: '0.0.0.0' [STRING - READ_WRITE]
+
+B<static_gateway>
+
+=over
+
+$modem->static_gateway('192.168.1.254');
+my $static_gateway = $modem->static_gateway;
+
+=back
+
+Desired static gateway IP address. Default: '0.0.0.0' [STRING - READ_WRITE]
+
+B<static_subnet>
+
+=over
+
+$modem->static_gateway('255.255.255.128');
+my $static_subnet = $modem->static_subnet;
+
+=back
+
+Desired static host subnet mask. Default: '255.255.255.0' [STRING - READ_WRITE]
+
+B<static_filename>
+
+=over
+
+$modem->static_filename('file.cfg');
+my $static_filename = $modem->static_filename;
+
+=back
+
+Name of desired TFTP configuration file. Default: 'cm.bin' [STRING - READ_WRITE]
+
+B<static_server>
+
+=over
+
+$modem->static_server('192.168.1.1');
+my $static_server = $modem->static_server;
+
+=back
+
+IP address of desired TFTP configuration server. Default: '0.0.0.0' [STRING - READ_WRITE]
+
+B<tod_host>
+
+=over
+
+$modem->tod_host('192.168.1.1');
+my $tod_host = $modem->tod_host;
+
+=back
+
+IP address of desired Time Of Day server. Default: '0.0.0.0' [STRING - READ_WRITE]
+
+B<bootloader_override>
+
+=over
+
+$modem->bootloader_override(1);
+my $bootloader_override = $modem->bootloader_override;
+
+=back
+
+Override default bootloader revision sent to ISP. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<bootloader_revision>
+
+=over
+
+$modem->bootloader_revision('1.1.2c');
+my $software_version = $modem->bootloader_revision;
+
+=back
+
+Bootloader revision sent to ISP. Default: '1.1.2c' [STRING - READ_WRITE]
+
+B<hardware_override>
+
+=over
+
+$modem->hardware_override(1);
+my $hardware_override = $modem->hardware_override;
+
+=back
+
+Override default hardware version sent to ISP. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<hardware_version>
+
+=over
+
+$modem->model('1');
+my $model = $modem->model;
+
+=back
+
+Hardware version sent to ISP. Default: '1' [STRING - READ_WRITE]
+
+B<model>
+
+=over
+
+$modem->model('SB5101');
+my $model = $modem->model;
+
+=back
+
+Model number sent to ISP. Default: '' [STRING - READ_WRITE]
+
+B<software_version>
+
+=over
+
+$modem->software_version('SB5101-2.7.6.0-GA-NOSH');
+my $software_version = $modem->software_version;
+
+=back
+
+Software version sent to ISP. Default: '' [STRING - READ_WRITE]
+
+B<snmp_disable>
+
+=over
+
+$modem->snmp_disable(1);
+my $snmp_disable = $modem->snmp_disable;
+
+=back
+
+Disable snmp probe requests from your ISP after initial registration. Default: 1 [BOOLEAN - READ_WRITE]
+
+B<snmp_port>
+
+=over
+
+$modem->snmp_port(225);
+my $snmp_port = $modem->snmp_port;
+
+=back
+
+Port number for SNMP scans. Default: 225 [INTEGER - READ_WRITE]
+
+B<traps_host>
+
+=over
+
+$modem->traps_host('192.168.1.1');
+my $traps_host = $modem->traps_host;
+
+=back
+
+IP Address to redirect SNMP requests to. Default: '0.0.0.0' [STRING - READ_WRITE]
+
+B<traps_port>
+
+=over
+
+$modem->traps_port(162);
+my $traps_port = $modem->traps_port;
+
+=back
+
+Port number to redirect SNMP requests to. Default: 162 [INTEGER - READ_WRITE]
+
+B<traps_redirect>
+
+=over
+
+$modem->traps_redirect(1);
+my $traps_redirect = $modem->traps_redirect;
+
+=back
+
+Redirect SNMP requests to another device and port (such as another modem on the network). Default: 0 [BOOLEAN - READ_WRITE]
+
+B<vendor>
+
+=over
+
+$modem->vendor('Motorola Corporation');
+my $vendor = $modem->vendor;
+
+=back
+
+Hardware vendor to emulate. Default: '' [STRING - READ_WRITE]
+
+=head1 AUTHOR
+
+Stephen Cox <andronics[at]gmail[dot]com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2013 by Stephen Cox.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0 (GPL Compatible)
+
+=cut
+
