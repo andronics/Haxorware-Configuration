@@ -2,6 +2,9 @@ package Haxorware::Configuration;
 
 use Moose;
 
+our $VERSION = '0.01';
+our $ABSTRACT = 'Haxorware firmware configuration module';
+
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 with
